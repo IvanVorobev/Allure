@@ -1,6 +1,10 @@
 package ru.netology.test;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import ru.netology.data.DataGenerator;
@@ -17,10 +21,20 @@ public class AllureTest {
 
     RegistrationByCustomerInfo registrationInfo = generateByInfo("ru");
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
     @Test
     void shouldEnterValidData() {
         open("http://localhost:7777");
-        $("[data-test-id='city'] input").setValue("Калуга");
+        $("[data-test-id='city'] inputx").setValue("Калуга");
         $("[data-test-id='date'] input").doubleClick();
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(DataGenerator.forwardDate(3));
